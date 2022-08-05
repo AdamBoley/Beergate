@@ -219,6 +219,18 @@ Create a Procfile
 
 
 
+
+# Bugs
+
+When trying to deploy an initial blank version of the project to Heroku, I ran into an error, with Heroku being unable to build a wheel for backports.zoneinfo
+
+Some Googling revealed that the problem could be to do with the version of Python that Heroku uses, and that a possible fix could be to add a runtime.txt file to the repository to specify the exact version of Python that should be used. Said file was added with `python-3.8.13`.
+
+
+
+
+
+
 # Testing
 
 ## Manual testing
