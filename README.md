@@ -78,9 +78,7 @@ The Beer model is used to create a table that holds all of the data to make a be
 | image              | an image            | Cloudinary image                                                 |
 | slug               | golden-champion     | SlugField, generated from name to create unique URLs             |
 | description        | This beer is a beer | TextField, forms main content of post                            |
-| keyword_1          | Hoppy               | CharField, first keyword to quickly describe a beer              |
-| keyword_2          | Fruity              | CharField, second keyword to quickly describe a beer             |
-| keyword_3          | Malty               | CharField, third keyword to quickly describe a beer              |
+| keywords           | Hoppy / Malty       | A list to hold keyword descriptions                              |
 | hops               | American / Indian   | CharField, the hops used in the beer                             |
 | upvotes            | 112                 | ManyToManyField, since many users can upvote many posts          |
 | downvotes          | 21                  | ManyToManyField, since many users can downvote many posts        |
@@ -152,6 +150,55 @@ The Selection model will be used to automatically fill out an order form when a 
 # Deployment
 
 This project was deployed to Heroku early on, as per the Django Blog walkthrough project. 
+
+## Project set up
+
+Given that this is a Django project, a number of terminal commands must be run before any real development work can begin:
+
+Install Django v3 and the Gunicorn web-server: <br>
+`pip3 install 'django<3' gunicorn`
+
+Install libraries necessary for working with PostgresQL:<br>
+`pip3 install dj_database_url psycopg2`
+
+Install libraries needed for Cloudinary:<br>
+`pip3 install dj3_cloudinary_storage`
+
+Create a requirements.txt file:<br>
+`pip3 freeze --local > requirements.txt`
+
+Create a new Django Project:<br>
+`django-admin startproject beergate .`
+
+Create a new Django app for the beer reviews: <br>
+`python3 manage.py startapp reviews`
+
+Then add 'reviews' to beergate/settings.py
+
+Now migrate the changes made by starting the beergate project and the reviews app to the database:<br>
+`python3 manage.py migrate`
+
+Check that Django and all other libraries have been installed by running the project locally:<br>
+`python3 manage.py runserver`
+
+Create a new Heroku app and add on the heroku-postgres module. Copy the DATABASE_URL config var
+
+Create an env.py file. At the top, import os and create an os environment variable called DATABASE_URL and assign it the value from Heroku as a string
+Then add a second os environment variable called SECRET_KEY and assign it a random value
+Add this to the Heroku config vars
+
+Add a conditional import to settings.py to import env.py
+Update the DATBASES variable in settings.py to use the heroku DATABASE_URL config var
+
+Then migrate the changes again:
+`python3 manage.py migrate`
+
+Add Port 8000 to Heroku config vars
+
+
+
+
+
 
 # Testing
 
