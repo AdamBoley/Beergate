@@ -195,6 +195,25 @@ Then migrate the changes again:
 
 Add Port 8000 to Heroku config vars
 
+### Cloudinary
+
+Create a Cloudinary account, copy API environment variable
+
+Add CLOUDINARY_URL environment variable to env.py and paste in
+Add same to Heroku config vars
+
+Add DISABLE_COLLECTSTATIC to Heroku config vars as well, with a value of 1
+
+Add static file storage and media file storage to settings.py
+Add local host and heroku app name to ALLOWED_HOSTS
+Add the TEMPLATES_DIR to settings.py
+
+Create media, static and templates directories at top-level of the repository
+
+Create a Procfile
+
+
+
 
 
 
