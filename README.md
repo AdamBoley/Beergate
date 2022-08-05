@@ -74,11 +74,11 @@ The Beer model is used to create a table that holds all of the data to make a be
 | brewery            | Hogsback            | CharField, One to Many since one brewery can make multiple beers |
 | type               | Lager / Stout / Ale | CharField                                                        |
 | colour             | Amber / Pale / Dark | CharField                                                        |
-| alcohol Content    | 4 / 5.5             | IntegerField(?)                                                  |
+| alcohol_content    | 4 / 5.5             | DecimalField(max_digits=3, decimal_places=1)                     |
 | image              | an image            | Cloudinary image                                                 |
 | slug               | golden-champion     | SlugField, generated from name to create unique URLs             |
-| description        | This beer is a beer | TextField, forms main content of post                            |
-| keywords           | Hoppy / Malty       | A list to hold keyword descriptions                              |
+| content            | This beer is a beer | TextField, forms main content of post                            |
+| keywords           | Hoppy / Malty       | CharField                                                        |
 | hops               | American / Indian   | CharField, the hops used in the beer                             |
 | upvotes            | 112                 | ManyToManyField, since many users can upvote many posts          |
 | downvotes          | 21                  | ManyToManyField, since many users can downvote many posts        |
@@ -93,7 +93,7 @@ The Beer model will also have a magic string method to return the name of the be
 
 ### Discussion
 
-The Beer model contains three keyword fields. The intention is to list these as one of the first items on a beer review post, so as to give a quick summary of the beers' characteristics to a reader. 
+The Beer model contains a keyword field, which may hold any number of values. The intention is to list these as one of the first items on a beer review post, so as to give a quick summary of the beers' characteristics to a reader. 
 <br>
 <br>
 The model also contains separate upvotes and downvotes fields, and methods to return counts of these. I am personally an avid user of Reddit, but I dislike Reddit's choice to combine upvotes and downvotes into a single number, as a user cannot see the total number of upvotes and downvotes. With separate upvote and downvote counts, the intention is to display both numbers, so that users can see how many people agree with a review, and how many people disagree, so as to be as well-informed as possible.
@@ -213,6 +213,21 @@ Create media, static and templates directories at top-level of the repository
 Create a Procfile
 
 
+## Development process
+
+Now that Django has been set up:
+
+I need to change up the process that is used in the Walkthrough
+
+Users should be able to make posts
+
+This will require appropriation of the code for leaving a comment
+
+I foresee two methods by which a user could make a post:
+- Hide the form where a user makes a post behind a button on the index page. When the user clicks this button, the form is revealed and the user may write their post
+- Provide a button with an anchor link that takes the user to a separate page where the post is written - USE THIS APPROACH
+    - This is a separation of concerns matter - the index page is displaying posts, the single_review page is for viewing a post and the make_a_post page is for writing a post.
+
 
 
 
@@ -225,6 +240,10 @@ Create a Procfile
 When trying to deploy an initial blank version of the project to Heroku, I ran into an error, with Heroku being unable to build a wheel for backports.zoneinfo
 
 Some Googling revealed that the problem could be to do with the version of Python that Heroku uses, and that a possible fix could be to add a runtime.txt file to the repository to specify the exact version of Python that should be used. Said file was added with `python-3.8.13`.
+
+In the end, I noted that this was extraneous, since INSTALLED_APPS was missing a comma. Once added, Heroku was able to build and deploy the app properly
+
+
 
 
 
