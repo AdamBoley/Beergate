@@ -84,8 +84,11 @@ The Beer model is used to create a table that holds all of the data to make a be
 | downvotes          | 21                  | ManyToManyField, since many users can downvote many posts        |
 | author             | John Smith          | ForeignKey, from User table, on delete cascade                   |
 | created_on         | 32nd of January     | DateTimeField                                                    |
-| excerpt            | This beer is nice   | TextField, used as a tag-line under a post name                  |
 | approved           | boolean yes/no      | BooleanField, I approve as admin superuser                       |
+| aroma              | 8                   | IntegerField, with validation to accept values between 1 and 10  |
+| appearance         | 5                   | IntegerField, with validation to accept values between 1 and 10  |
+| taste              | 10                  | IntegerField, with validation to accept values between 1 and 10  |
+| aftertaste         | 4                   | IntegerField, with validation to accept values between 1 and 10  |
 
 The Beer model will have a Meta class that orders reviews by created_on in descending order, so that the newest reviews are displayed first
 
@@ -101,6 +104,18 @@ The model also contains separate upvotes and downvotes fields, and methods to re
 <br>
 The Author field will contain on_delete=models.CASCADE, so that if a user's account is deleted, all beer reviews made by that user will be deleted as well. This is some defensive programming on my part, as malicious users may make posts before their accounts can be deleted using the Django administration backend. This saves an administrator having to manually delete all of that user's posts. 
 <br>
+<br>
+The aroma, appearance, taste, aftertaste and trueness_to_style columns were added after I found [RateBeer](https://www.ratebeer.com/), and noted that said site allows numerical scores. I felt that using numerical scores along with class methods to do something with these would elevate the project. I am a member of CAMRA, and so I was able to find the criteria used by their judges in the Champion Beer of Britain competition. Explanations of these criteria are in the table below:<br>
+| Criteria          | Explanation                                                                                      |
+| ------------------| -------------------------------------------------------------------------------------------------|
+| Aroma             | The smell of the beer - does it smell good or bad                                                |
+| Appearance        | Colour, clarity, head and visual carbonation                                                     |
+| Taste             | How does it taste - is it overly bitter, too weak or just right?                                 |
+| Aftertaste        | How the taste lingers in the mouth                                                               |
+| Trueness to Style | How it deviates from traditional beer styles - If a stout, does it taste and look like an stout? | 
+
+After some thought, the Trueness to Style criterion was not included, as I felt that this was more of an academic ranking that could penalise beers that are different and are specifically brewed to move outside of traditional conventions, such as lighter stouts or darker pale ales. 
+
 <br>
 All other fields should be self-explanatory.
 
