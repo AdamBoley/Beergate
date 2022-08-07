@@ -32,6 +32,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['beergate.herokuapp.com', 'localhost']
 
+CSRF_TRUSTED_ORIGINS = ['https://*.8000-adamboley-beergate-byqpbxy6rvz.ws-eu59.gitpod.io']
+
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 
@@ -44,6 +47,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'django.contrib.staticfiles',
     'cloudinary',
+    'django_summernote',
     'reviews',
 ]
 

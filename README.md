@@ -53,6 +53,9 @@ The beer review part of the project will be contained within one Django app call
 
 Should time permit, a second app dealing with the pseudo-e-commerce part of the project will be started. This will use a database model to contain a pre-made selection of beer, which would equate to a shipment of a case of beer. 
 
+When formatting the admin panel, I decided to allow filtering by 5 categories - approved, created_on, brewery, type and author. Filtering by approved allows a superuser to see reviews that have not yet been approved. Filtering by created_on allows superusers to see what reviews have been posted in the last periods of time. Filtering by brewery and type allows superusers to see reviews of beers brewed by certain breweries and of beers of a certain type. Filtering by author allows superusers to see posts by certain users, which may allow them to find users who are particularly prolific. 
+
+
 # Design Choices
 
 I intend to use the background image used in the first Beergate project, that of a tall glass of beer with a dark background, which is then given some opacity to darken it off. This will apply to all pages for a uniform user experience. 
@@ -115,7 +118,8 @@ The aroma, appearance, taste, aftertaste and trueness_to_style columns were adde
 | Trueness to Style | How it deviates from traditional beer styles - If a stout, does it taste and look like an stout? | 
 
 After some thought, the Trueness to Style criterion was not included, as I felt that this was more of an academic ranking that could penalise beers that are different and are specifically brewed to move outside of traditional conventions, such as lighter stouts or darker pale ales. 
-
+<br>
+The slug field is used to generate unique URLs. Similar to how slugs are generated in the Django Blog walkthrough, the slugs in this project are generated primarily using the beer_review field. However, the slugs are also generated using the author field. The idea behind this is to allow multiple reviews of the same beer. Just using the beer_name would invalidate this approach, since the slugs would not be unique due to the formatting of the slug field. Combining the beer_name and author fields allows multiple reviews of the same beer, provided that each review is authored by a different user. I feel that it is reasonable that the same author would not post two reviews of the same beer. 
 <br>
 All other fields should be self-explanatory.
 
@@ -227,6 +231,44 @@ Create media, static and templates directories at top-level of the repository
 
 Create a Procfile
 
+### Models
+
+Create Models in reviews/models.py
+
+Prepare migrations:
+`python3 manage.py makemigrations`
+
+Load models into database and create tables:
+`python3 manage.py migrate`
+
+### Superuser and Django admin panel set up
+
+Create a superuser:
+`python3 manage.py createsuperuser`
+
+Run a development server to access the Django admin panel:
+`python3 manage.py runserver`
+
+Append `/admin/` to the URL
+
+Login to Django admin backend using superuser credentials
+
+(solve problem relating to automatic upgrade to Django v4.1 - see bugs section)
+
+Update admin.py to allow superusers to create beer reviws in the Django admin panel
+
+Install Summernote to allow rich text in admin panel:
+`pip3 install django-summernote`
+
+Add summernote to requirements.txt:
+`pip3 freeze --local > requirements.txt`
+
+Add summernote to INSTALLED_APPS in settings.py
+
+Update urls.py, then admin.py
+
+Migrate again:
+`python3 manage.py migrate`
 
 ## Development process
 
@@ -259,7 +301,17 @@ Some Googling revealed that the problem could be to do with the version of Pytho
 In the end, I noted that this was extraneous, since INSTALLED_APPS was missing a comma. Once added, Heroku was able to build and deploy the app properly
 
 
+After creating a superuser to access the Django backend, I ran into a 403 error when trying to login using that superuser via the admin login page. 
 
+Some Googling found [this StackOverflow page](https://stackoverflow.com/questions/70285834/forbidden-403-csrf-verification-failed-request-aborted-reason-given-for-fail/70326426#70326426). Though this should apply only to Django v4.x.x , where I specifically installed Django v3, as per the walkthrough videos. 
+
+Running the command `python3 -m django --version`, obtained from [this StackOverflow page](https://stackoverflow.com/questions/6468397/how-to-check-django-version), to check the version of Django installed, I found that the project was using Django v4. The Django documentation says that Django v4.1 was released on 3/8/22, about 4 days before I tried to access the backend. I can only conclude that Django upgraded from v3 to v4.1 automatically. 
+
+To solve the error, I found [this StackOverflow page](https://stackoverflow.com/questions/29573163/django-admin-login-suddenly-demanding-csrf-token), which provided a line of code that must be added to settings.py:
+
+CSRF_TRUSTED_ORIGINS = ['https://*.YOUR_DOMAIN.COM'], replacing YOUR_DOMAIN.COM with the URL of the Gitpod workspace I was using, prefixed with `8000-` to account for the development server. 
+
+This worked, and allowed me to login to the Django backend without issue. The code above appears to override the need to provide a CSRF token when performing actions from this workspace. This may present a vulnerability, as a CSRF token is Django's way of protecting sites against malicious users, and the code in settings.py overrides that. I asked my Mentor, and his response was....
 
 
 
