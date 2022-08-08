@@ -270,6 +270,12 @@ Update urls.py, then admin.py
 Migrate again:
 `python3 manage.py migrate`
 
+### Views
+
+Views and URLs created as per walkthrough videos. Beer review posts not displaying. 
+
+Problem may lie in views.py, where reviews are filtered by approved=True. May need to update model to use the Draft / Published IntegerField system of the Django Blog. 
+
 ## Development process
 
 Now that Django has been set up:
