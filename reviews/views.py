@@ -9,5 +9,5 @@ class BeerReviewList(generic.ListView):
     model = BeerReview
     queryset = BeerReview.objects.filter(approved=True).order_by('-created_on')
     template_name = 'index.html'
-    paginate_by = 8
+    paginate_by = 4
 

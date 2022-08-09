@@ -7,7 +7,7 @@
         <!-- Beer Reviews -->
         <div class="col-12 mt-3 left">
             <div class="row">
-                {% for beer_review in beer_review_list %}
+                {% for beer_review in object_list %}
                     <div class="col-md-3">
                         <div class="card mb-4">
                             <div class="card-body">
@@ -21,10 +21,7 @@
                                         <p>Author: {{ beer_review.author }}</p>
                                     </div>
                                 </div>
-                                <a href="{% url 'beer_review_single' beer_review.slug %}" class="post-link">
-                                    <!--This calls the second path in urlpatterns in blog/urls.py-->
-                                    <h2 class="card-title">{{ beer_review.beer_name }}</h2>
-                                </a>
+                                
                                 <hr>
                                 <p class="card-text text-muted h6">
                                     {{ beer_review.created_on }}

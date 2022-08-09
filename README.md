@@ -276,6 +276,12 @@ Views and URLs created as per walkthrough videos. Beer review posts not displayi
 
 Problem may lie in views.py, where reviews are filtered by approved=True. May need to update model to use the Draft / Published IntegerField system of the Django Blog. 
 
+Views created successfully and above problem solved - see bugs section. 
+
+### Single beer review page
+
+
+
 ## Development process
 
 Now that Django has been set up:
@@ -293,7 +299,18 @@ I foresee two methods by which a user could make a post:
 
 
 
+For beer_review_single:
+<!-- <a href="{% url 'beer_review_single' beer_review.slug %}" class="post-link">
+                                    This calls the second path in urlpatterns in blog/urls.py
+                                    <h2 class="card-title">{{ beer_review.beer_name }}</h2>
+                                </a> -->
 
+
+To do:
+
+- Review generic placeholder image - it is too small
+- Rework Bootstrap card structure
+- provide a consistent aspect ratio for post images
 
 
 
@@ -318,6 +335,12 @@ To solve the error, I found [this StackOverflow page](https://stackoverflow.com/
 CSRF_TRUSTED_ORIGINS = ['https://*.YOUR_DOMAIN.COM'], replacing YOUR_DOMAIN.COM with the URL of the Gitpod workspace I was using, prefixed with `8000-` to account for the development server. 
 
 This worked, and allowed me to login to the Django backend without issue. The code above appears to override the need to provide a CSRF token when performing actions from this workspace. This may present a vulnerability, as a CSRF token is Django's way of protecting sites against malicious users, and the code in settings.py overrides that. I asked my Mentor, and his response was....
+
+
+
+When attempting to render an BeerReview database entry, I initially could not get a Bootstrap card holding the various fields to display. I thought that this may have been a problem with my views. Where the Django Blog uses a status field to mark a post as either draft or published, I am merely using an approved field, and then filtering posts to display by the boolean value in the approved field. Removing this stipulation did not work. 
+
+I then viewed the index.html page in the Dev Tools and found that the card was not even rendering, and that the code was stopping at the Templating Language For Loop. I had been using for `beer_review in beer_review_list`. I then consulted the [Django documentation on class-based views](https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-display/), and found that their example code uses `for publisher in object_list`. I followed their pattern and changed `beer_review_list` to `object_list`. This worked, and the index page displayed the test beer review that I had made in the database. 
 
 
 
@@ -356,5 +379,6 @@ Gitpod
 <br>
 Heroku
 <br>
+Cloudinary
 
 # Credits
