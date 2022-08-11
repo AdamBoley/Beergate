@@ -21,6 +21,10 @@
                                         <p>Author: {{ beer_review.author }}</p>
                                     </div>
                                 </div>
+                                <a href="{% url 'beer_review_single' beer_review.slug %}" class="post-link">
+                                    <!-- This calls the second path in urlpatterns in blog/urls.py -->
+                                    <h2 class="card-title">{{ beer_review.beer_name }}</h2>
+                                </a>
                                 
                                 <hr>
                                 <p class="card-text text-muted h6">

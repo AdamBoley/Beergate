@@ -311,6 +311,7 @@ To do:
 - Review generic placeholder image - it is too small
 - Rework Bootstrap card structure
 - provide a consistent aspect ratio for post images
+- Background image not displaying on deployed site
 
 
 
