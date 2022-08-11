@@ -323,6 +323,14 @@ Visit the login page to check that these pages are extending base.html properly
 Install Crispy Forms:
 `pip3 install django-crispy-forms`
 
+Add Crispy Forms to settings.py INSTALLED_APPS
+
+Create a forms.py in reviews
+
+Import the Comment class (and the BeerReview Class, for later)
+
+
+
 ## Development process
 
 Now that Django has been set up:
@@ -354,8 +362,13 @@ To do:
 - Look into an error displayed when creating a new account. Account appeared to be created successfully (I was able to log in with it), but got a Django error page with Error 111 Connection Refused
 - 
 
-
-
+For a user-written beer review form:
+- need a completed BeerReviewForm in forms.py
+- need a new view in views.py
+- need a context in the return render of the view
+- need a template and front-end links to that
+- need a path in urls.py for that template
+- Add some functionality to handle an improperly completed form. Apply this to the comment form as well (for example if a user tries to submit an empty form). 
 
 # Bugs
 
@@ -385,6 +398,17 @@ When attempting to render an BeerReview database entry, I initially could not ge
 I then viewed the index.html page in the Dev Tools and found that the card was not even rendering, and that the code was stopping at the Templating Language For Loop. I had been using for `beer_review in beer_review_list`. I then consulted the [Django documentation on class-based views](https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-display/), and found that their example code uses `for publisher in object_list`. I followed their pattern and changed `beer_review_list` to `object_list`. This worked, and the index page displayed the test beer review that I had made in the database. 
 
 Some minor bugs were encountered when implementing the functionality to view a single beer review. These turned out to be syntax errors and were easily identified and rectified when Django displayed the error pages. 
+
+
+11/8/22:
+When adding the code to allow a user to post a comment on a beer_review_single page, I encountered a ValueError - Cannot assign "`<username>`": "Comment.author" must be a "User" instance.
+
+The offending code was in the views.py file, and had been:
+`comment_form.instance.author = request.user.username`, per the walkthrough video on adding comments
+
+Some Googling revealed that another developer had encountered a similar issue when using Django, who asked [this question](https://groups.google.com/g/django-users/c/cKd3t7yQzFo). An answer recommended using `author=request.user` that instance, which I thought might apply to my code. I removed `.username` from the code and I was then able to submit a comment as expected. A check of the Django admin panel showed that the comments had been submitted successfully, and were awaiting approval. Once approved, only the comments' created_on fields were displaying properly. A check of the code revealed that I had been ported over the HTML code from the walkthrough project without changing the fields to reflect those of my models. Since my Comment model and the walkthrough's Comment model share a created_on field, only this was displaying initially. Once the fields had been updated, the comment displayed properly. 
+
+Given that I was using code that is largely identical to that of the walkthrough project, I can only assume that this is an artefact of the upgrade to Django v4.1
 
 
 
