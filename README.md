@@ -280,7 +280,48 @@ Views created successfully and above problem solved - see bugs section.
 
 ### Single beer review page
 
+Create BeerReviewSingle view that contains a get method and a return render
 
+Create a template to display the review - beer_review_single.html
+
+Create a path in urls.py 
+
+### AllAuth
+
+Install AllAuth:
+`pip3 install django-allauth`
+
+Update requirements.txt:
+`pip3 freeze --local > requirements.txt`
+
+In beergate/urls - add a path for the allauth urls. 
+
+In settings.py - add allauth, allauth.account and allauth.socialaccount to INSTALLED_APPS. Add SITE_ID=1, LOGIN_REDIRECT_URL='/' and LOGout_REDIRECT_URL='/'
+
+Run migrations:
+`python3 manage.py migrate`
+
+Port in templating language for authenticated users to navbar
+
+Go to Register page, create account
+
+Go to Login page, login using that account
+
+Now modify allauth templates:
+
+Determine version of Python:
+`ls ../.pip-modules/lib` - python v3.8
+
+Copy allauth templates to templates folder:
+`cp -r ../.pip-modules/lib/python3.8/site-packages/allauth/templates/* ./templates`
+
+In account/login.html, account/logout.html and account/signup.html, replace `{% extends "account/base.html" %}` with `{% extends "base.html" %}`
+Visit the login page to check that these pages are extending base.html properly
+
+### Commenting
+
+Install Crispy Forms:
+`pip3 install django-crispy-forms`
 
 ## Development process
 
@@ -299,19 +340,19 @@ I foresee two methods by which a user could make a post:
 
 
 
-For beer_review_single:
-<!-- <a href="{% url 'beer_review_single' beer_review.slug %}" class="post-link">
-                                    This calls the second path in urlpatterns in blog/urls.py
-                                    <h2 class="card-title">{{ beer_review.beer_name }}</h2>
-                                </a> -->
 
 
 To do:
 
 - Review generic placeholder image - it is too small
-- Rework Bootstrap card structure
+- Rework Bootstrap card structure for index.html
 - provide a consistent aspect ratio for post images
 - Background image not displaying on deployed site
+- Work on beer_review_single template
+- Implement AllAuth
+- Add higher-level AllAuth functionality - social media sign in, password complexity, confirmation emails, etc
+- Look into an error displayed when creating a new account. Account appeared to be created successfully (I was able to log in with it), but got a Django error page with Error 111 Connection Refused
+- 
 
 
 
@@ -343,7 +384,7 @@ When attempting to render an BeerReview database entry, I initially could not ge
 
 I then viewed the index.html page in the Dev Tools and found that the card was not even rendering, and that the code was stopping at the Templating Language For Loop. I had been using for `beer_review in beer_review_list`. I then consulted the [Django documentation on class-based views](https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-display/), and found that their example code uses `for publisher in object_list`. I followed their pattern and changed `beer_review_list` to `object_list`. This worked, and the index page displayed the test beer review that I had made in the database. 
 
-
+Some minor bugs were encountered when implementing the functionality to view a single beer review. These turned out to be syntax errors and were easily identified and rectified when Django displayed the error pages. 
 
 
 
