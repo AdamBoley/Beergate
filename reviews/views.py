@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic, View
+from django.views.generic.edit import CreateView
 from .models import BeerReview
-from .forms import CommentForm, BeerReviewForm
-
+from .forms import CommentForm, UserReviewForm
 
 # Create your views here.
 
@@ -70,6 +70,41 @@ class BeerReviewSingle(View):
                 "upvoted": upvoted,
                 "downvoted": downvoted,
                 "comment_form": CommentForm()
+            }
+        )
+
+
+class UserReview(View):
+
+    model = BeerReview
+    template_name = 'user_review.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(
+            request,
+            "user_review.html",
+            {
+                "user_review_form": UserReviewForm(),
+                "reviewed": False
+            }
+        )
+
+    def post(self, request, *args, **kwargs):
+        user_review_form = UserReviewForm(data=request.POST)
+
+        if user_review_form.is_valid():
+            user_review_form.instance.author = request.user
+            user_review = user_review_form.save(commit=False)
+            user_review.save()
+        else:
+            user_review_form = UserReviewForm()
+
+        return render(
+            request,
+            "user_review.html",
+            {
+                "user_review_form": UserReviewForm(),
+                "reviewed": True
             }
         )
 

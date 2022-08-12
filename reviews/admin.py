@@ -18,7 +18,7 @@ class BeerReviewAdmin(SummernoteModelAdmin):
     def approve_beer_review(self, request, queryset):
         queryset.update(approved=True)
 
-#admin.site.register(BeerReview)
+# admin.site.register(BeerReview)
 
 # future work notes:
 # list display adds columns to the Django admin panel that show fields

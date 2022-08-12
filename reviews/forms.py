@@ -8,11 +8,7 @@ class CommentForm(forms.ModelForm):
         fields = ('comment_body',)
 
 
-
-
-
-
-class BeerReviewForm(forms.ModelForm):
+class UserReviewForm(forms.ModelForm):
     class Meta:
         model = BeerReview
         fields = (
@@ -28,5 +24,5 @@ class BeerReviewForm(forms.ModelForm):
             'aroma',
             'appearance',
             'taste',
-            'aftertaste'
+            'aftertaste',
         )

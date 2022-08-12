@@ -296,7 +296,7 @@ Update requirements.txt:
 
 In beergate/urls - add a path for the allauth urls. 
 
-In settings.py - add allauth, allauth.account and allauth.socialaccount to INSTALLED_APPS. Add SITE_ID=1, LOGIN_REDIRECT_URL='/' and LOGout_REDIRECT_URL='/'
+In settings.py - add allauth, allauth.account and allauth.socialaccount to INSTALLED_APPS. Add SITE_ID=1, LOGIN_REDIRECT_URL='/' and LOGOUT_REDIRECT_URL='/'
 
 Run migrations:
 `python3 manage.py migrate`
@@ -329,6 +329,15 @@ Create a forms.py in reviews
 
 Import the Comment class (and the BeerReview Class, for later)
 
+### Creating a user submitted beer review form
+
+Create a beer review form class in forms.py
+
+Create a new view in views.py
+
+Problem - 404 error when accessing user_review page
+
+Tutor support solution - Uninstall Django 4.1, downgrade to Django 3.2, reorder urls in urls.py so that the user_review path is above the beer_review_single path
 
 
 ## Development process
@@ -353,22 +362,26 @@ I foresee two methods by which a user could make a post:
 To do:
 
 - Review generic placeholder image - it is too small
-- Rework Bootstrap card structure for index.html
+- Rework Bootstrap card structure for index.html, beer_review_single.html and user_review.html
 - provide a consistent aspect ratio for post images
-- Background image not displaying on deployed site
-- Work on beer_review_single template
-- Implement AllAuth
+- Background image not displaying on deployed site - may be fixed by downgrade to Django 3.2 and STATIC_URL variable in settings.py. Update when pushed to Heroku
 - Add higher-level AllAuth functionality - social media sign in, password complexity, confirmation emails, etc
 - Look into an error displayed when creating a new account. Account appeared to be created successfully (I was able to log in with it), but got a Django error page with Error 111 Connection Refused
+- For the admin backend, add a disapprove method, so that several previously-approved reviews can be made inactive at the same time, much like several unapproved reviews can be approved at the same time. 
+- Find fix to the problem on images not uploading properly
+- Implement a Summernote content field
+- [Implement a search bar function](https://learndjango.com/tutorials/django-search-tutorial)
 - 
 
 For a user-written beer review form:
-- need a completed BeerReviewForm in forms.py
-- need a new view in views.py
-- need a context in the return render of the view
-- need a template and front-end links to that
-- need a path in urls.py for that template
+- need a completed BeerReviewForm in forms.py - done
+- need a new view in views.py - done
+- need a context in the return render of the view - done?
+- need a template and front-end links to that - done
+- need a path in urls.py for that template - done
 - Add some functionality to handle an improperly completed form. Apply this to the comment form as well (for example if a user tries to submit an empty form). 
+- update admin.py with an approve beer review action - done?
+ALL DONE
 
 # Bugs
 
@@ -397,6 +410,8 @@ When attempting to render an BeerReview database entry, I initially could not ge
 
 I then viewed the index.html page in the Dev Tools and found that the card was not even rendering, and that the code was stopping at the Templating Language For Loop. I had been using for `beer_review in beer_review_list`. I then consulted the [Django documentation on class-based views](https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-display/), and found that their example code uses `for publisher in object_list`. I followed their pattern and changed `beer_review_list` to `object_list`. This worked, and the index page displayed the test beer review that I had made in the database. 
 
+For later - `object_list` may be customised by adding `context_object_name = ` to the class in views.py, and assigning beer_reviews. i.e `context_object_name = beer_reviews`, and then using `for beer_review in beer_reviews` in the Templating Language. From [this video](https://www.youtube.com/watch?v=llbtoQTt4qw)
+
 Some minor bugs were encountered when implementing the functionality to view a single beer review. These turned out to be syntax errors and were easily identified and rectified when Django displayed the error pages. 
 
 
@@ -410,6 +425,15 @@ Some Googling revealed that another developer had encountered a similar issue wh
 
 Given that I was using code that is largely identical to that of the walkthrough project, I can only assume that this is an artefact of the upgrade to Django v4.1
 
+
+12/8/22:
+When adding a form that would allow users to post beer reviews, I encountered a 404 error where the user_review.html page could not be located, despite being present. Tutor support were eventually able to find the problem - the UserReview url path had to be above the BeerReviewSingle path, per the [URL dispatcher documentation](https://docs.djangoproject.com/en/4.1/topics/http/urls/). Once this had been implemented, the page displayed as expected. However, the form did not display. This proved easy to diagnose - in views.py I had `"user_review": UserReviewForm()` in the dictionary of the return render, whereas I was using `user_review_form` in the templating language of `user_review.html`. Changing the view code to `user_review_form` caused the form entry fields to be displayed as expected. A quick test using a beer called Surrey Nirvana from the Hogsback brewery confirmed that the form was working and had been submitted to the backend. Logging in as the superuser allowed me to approve this entry, and it was then displayed as expected. Formatting remains an issue, but this should be easily corrected. 
+
+One issue remains - on the front-end form, per the model, there is an image field. An image can be selected using a standard image upload interface, but this does not appear to be passed into the admin backend, as the image name there defaults to the placeholder image. 
+
+It is also worth noting that the slug is not generated until the review is accessed for approval. This could cause problems if reviews are blanket approved without accessing them - this requires testing to be fully sure. 
+
+It should also be noted that during the Tutor support session, I was advised to downgrade to Django 3.2. As a result, the CSRF token fix mentioned above was removed, on the assumption that it would no longer be necessary. The bug and the solution have been documented should the problem arise again. 
 
 
 # Testing
@@ -448,3 +472,5 @@ Heroku
 Cloudinary
 
 # Credits
+
+Gemma from Tutor support, for helping to fix the issue with being unable to access the user_review.html page. 

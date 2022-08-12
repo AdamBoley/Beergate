@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    {% if reviewed %}
+                        <div class="alert alert-success" role="alert">
+                            Your review has been submitted and is awaiting approval
+                        </div>
+                    {% else %}
+                        {% if user.is_authenticated %}
+                            <h3>
+                                Leave a beer review of your own
+                            </h3>
+                            <p>
+                                Posting as: {{ user.username }}
+                            </p>
+                            <form method="POST" style="margin-top: 1.3em;">
+                                {{ user_review_form | crispy }}
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-signup btn-lg">Submit</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
