@@ -360,7 +360,8 @@ I foresee two methods by which a user could make a post:
 
 
 To do:
-
+- implement upvotes / downvotes feature
+- implement an exclusivity feature - if a user upvotes, remove their downvote, if user downvotes, remove their upvote so that they cannot do both at the same time
 - Review generic placeholder image - it is too small
 - Rework Bootstrap card structure for index.html, beer_review_single.html and user_review.html
 - provide a consistent aspect ratio for post images

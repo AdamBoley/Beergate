@@ -147,3 +147,5 @@ class Comment(models.Model):
         These may then be displayed
         """
         return self.downvotes.count()
+
+

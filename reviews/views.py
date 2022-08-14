@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic, View
-from django.views.generic.edit import CreateView
-from .models import BeerReview
+from django.http import HttpResponseRedirect
+from .models import BeerReview, Comment
 from .forms import CommentForm, UserReviewForm
 
 # Create your views here.
@@ -107,4 +107,46 @@ class UserReview(View):
                 "reviewed": True
             }
         )
+
+
+class ReviewUpvote(View):
+
+    def post(self, request, slug):
+        beer_review = get_object_or_404(BeerReview, slug=slug)
+
+        if beer_review.upvotes.filter(id=request.user.id).exists():
+            beer_review.upvotes.remove(request.user)
+
+        else:
+            beer_review.upvotes.add(request.user)
+
+        return HttpResponseRedirect(reverse('beer_review_single', args=[slug]))
+
+
+class ReviewDownvote(View):
+
+    def post(self, request, slug):
+        beer_review = get_object_or_404(BeerReview, slug=slug)
+
+        if beer_review.downvotes.filter(id=request.user.id).exists():
+            beer_review.downvotes.remove(request.user)
+
+        else:
+            beer_review.downvotes.add(request.user)
+
+        return HttpResponseRedirect(reverse('beer_review_single', args=[slug]))
+
+
+# class CommentUpvote(View):
+
+#     def post(self, request, beer_review):
+#         comment = get_object_or_404(Comment, beer_review=beer_review)
+
+#         if comment.upvotes.filter(id=request.user.id).exists():
+#             comment.upvotes.remove(request.user)
+        
+#         else:
+#             comment.upvotes.add(request.user)
+        
+#         return HttpResponseRedirect(reverse('beer_review_single', args=[beer_review]))
 
