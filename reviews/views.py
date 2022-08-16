@@ -113,6 +113,8 @@ class ReviewUpvote(View):
 
     def post(self, request, slug):
         beer_review = get_object_or_404(BeerReview, slug=slug)
+        # beer_review = get_object_or_404(BeerReview)
+        # Using the above returns all extant BeerReview objects, slug=slug provides the exact review
 
         if beer_review.upvotes.filter(id=request.user.id).exists():
             beer_review.upvotes.remove(request.user)
@@ -121,6 +123,7 @@ class ReviewUpvote(View):
             beer_review.upvotes.add(request.user)
 
         return HttpResponseRedirect(reverse('beer_review_single', args=[slug]))
+        # return HttpResponseRedirect(reverse('beer_review_single'))
 
 
 class ReviewDownvote(View):
@@ -139,8 +142,11 @@ class ReviewDownvote(View):
 
 # class CommentUpvote(View):
 
-#     def post(self, request, beer_review):
-#         comment = get_object_or_404(Comment, beer_review=beer_review)
+#     def post(self, request, slug, beer_review):
+        
+#         comment = get_object_or_404(Comment)
+#         parent = get(Comment.beer_review.pk)
+#         # based on the note on ReviewUpvote, I need a way of targetting exactly the Comment object I want to upvote
 
 #         if comment.upvotes.filter(id=request.user.id).exists():
 #             comment.upvotes.remove(request.user)
@@ -148,5 +154,5 @@ class ReviewDownvote(View):
 #         else:
 #             comment.upvotes.add(request.user)
         
-#         return HttpResponseRedirect(reverse('beer_review_single', args=[beer_review]))
+#         return HttpResponseRedirect(reverse('beer_review_single'))
 

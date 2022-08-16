@@ -356,23 +356,25 @@ I foresee two methods by which a user could make a post:
     - This is a separation of concerns matter - the index page is displaying posts, the single_review page is for viewing a post and the make_a_post page is for writing a post.
 
 
-
+Done:
+- implement upvotes / downvotes feature for Beer Reviews - done 
 
 
 To do:
-- implement upvotes / downvotes feature
+
+- implement upvotes / downvotes feature for Comments - on hold
 - implement an exclusivity feature - if a user upvotes, remove their downvote, if user downvotes, remove their upvote so that they cannot do both at the same time
 - Review generic placeholder image - it is too small
 - Rework Bootstrap card structure for index.html, beer_review_single.html and user_review.html
-- provide a consistent aspect ratio for post images
+- Provide a consistent aspect ratio for post images
 - Background image not displaying on deployed site - may be fixed by downgrade to Django 3.2 and STATIC_URL variable in settings.py. Update when pushed to Heroku
 - Add higher-level AllAuth functionality - social media sign in, password complexity, confirmation emails, etc
 - Look into an error displayed when creating a new account. Account appeared to be created successfully (I was able to log in with it), but got a Django error page with Error 111 Connection Refused
 - For the admin backend, add a disapprove method, so that several previously-approved reviews can be made inactive at the same time, much like several unapproved reviews can be approved at the same time. 
-- Find fix to the problem on images not uploading properly
-- Implement a Summernote content field
+- Find fix to the problem on images not uploading properly - use ImageField
+- Implement a Summernote content field or other rich text editor for user-generated posts
 - [Implement a search bar function](https://learndjango.com/tutorials/django-search-tutorial)
-- 
+- Extend User model to include a profile picture and other information - display this on the navbar and below each beer review
 
 For a user-written beer review form:
 - need a completed BeerReviewForm in forms.py - done
