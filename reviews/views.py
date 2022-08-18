@@ -15,9 +15,10 @@ class BeerReviewList(generic.ListView):
 
 class BeerReviewSingle(View):
 
-    def get(self, request, slug, *args, **kwargs):
+    def get(self, request, pk, *args, **kwargs):
         queryset = BeerReview.objects.filter(approved=True)
-        beer_review = get_object_or_404(queryset, slug=slug)
+        # beer_review = get_object_or_404(queryset, slug=slug)
+        beer_review = get_object_or_404(queryset, pk=pk)
         comments = beer_review.comments.filter(approved=True).order_by('created_on')
         upvoted = False
         downvoted = False
@@ -39,9 +40,10 @@ class BeerReviewSingle(View):
             }
         )
 
-    def post(self, request, slug, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         queryset = BeerReview.objects.filter(approved=True)
-        beer_review = get_object_or_404(queryset, slug=slug)
+        # beer_review = get_object_or_404(queryset, slug=slug)
+        beer_review = get_object_or_404(queryset, pk=pk)
         comments = beer_review.comments.filter(approved=True).order_by('created_on')
         upvoted = False
         downvoted = False
@@ -111,8 +113,8 @@ class UserReview(View):
 
 class ReviewUpvote(View):
 
-    def post(self, request, slug):
-        beer_review = get_object_or_404(BeerReview, slug=slug)
+    def post(self, request, pk):
+        beer_review = get_object_or_404(BeerReview, pk=pk)
         # beer_review = get_object_or_404(BeerReview)
         # Using the above returns all extant BeerReview objects, slug=slug provides the exact review
 
@@ -122,14 +124,14 @@ class ReviewUpvote(View):
         else:
             beer_review.upvotes.add(request.user)
 
-        return HttpResponseRedirect(reverse('beer_review_single', args=[slug]))
-        # return HttpResponseRedirect(reverse('beer_review_single'))
+        # return HttpResponseRedirect('beer_review_single', args=[pk])
+        return HttpResponseRedirect(reverse('beer_review_single', args=[pk]))
 
 
 class ReviewDownvote(View):
 
-    def post(self, request, slug):
-        beer_review = get_object_or_404(BeerReview, slug=slug)
+    def post(self, request, pk):
+        beer_review = get_object_or_404(BeerReview, pk=pk)
 
         if beer_review.downvotes.filter(id=request.user.id).exists():
             beer_review.downvotes.remove(request.user)
@@ -137,7 +139,8 @@ class ReviewDownvote(View):
         else:
             beer_review.downvotes.add(request.user)
 
-        return HttpResponseRedirect(reverse('beer_review_single', args=[slug]))
+        return HttpResponseRedirect(reverse('beer_review_single', args=[pk]))
+        # return HttpResponseRedirect('beer_review_single', args=[pk])
 
 
 # class CommentUpvote(View):

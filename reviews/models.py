@@ -29,9 +29,9 @@ class BeerReview(models.Model):
     """
     The model for a beer review post, much like a blog post
     Contains all database fields that I want to be injected into a page
+    slug = models.SlugField(max_length=100, unique=True)
     """
     beer_name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, unique=True)
     brewery = models.CharField(max_length=200)
     type = models.CharField(max_length=50)
     colour = models.CharField(max_length=50)

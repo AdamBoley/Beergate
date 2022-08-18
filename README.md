@@ -375,6 +375,8 @@ To do:
 - Implement a Summernote content field or other rich text editor for user-generated posts
 - [Implement a search bar function](https://learndjango.com/tutorials/django-search-tutorial)
 - Extend User model to include a profile picture and other information - display this on the navbar and below each beer review
+- If a user attempts to submit a duplicate review - i.e same author and same beer name, an error is thrown. Need something to handle this
+- It does appear that when uploading a post from the site that a slug is not automatically generated
 
 For a user-written beer review form:
 - need a completed BeerReviewForm in forms.py - done
@@ -437,6 +439,16 @@ One issue remains - on the front-end form, per the model, there is an image fiel
 It is also worth noting that the slug is not generated until the review is accessed for approval. This could cause problems if reviews are blanket approved without accessing them - this requires testing to be fully sure. 
 
 It should also be noted that during the Tutor support session, I was advised to downgrade to Django 3.2. As a result, the CSRF token fix mentioned above was removed, on the assumption that it would no longer be necessary. The bug and the solution have been documented should the problem arise again. 
+
+18/8/22:
+After designing and implementing the functionality to allow a user to submit a review, a bug was noted that did not allow more than one review to exist in the admin area without being reviewed. The reason is that a review's slug is generated in-situ when viewed in the admin area, and the slug is used to generate urls. The slug field in models is set to be unique, the reasoning being that urls should be unique. I reason that even an empty slug field, is considered by the admin as being valid, so therefore there cannot be more than 1 review with an empty slug field, and an empty slug field is by itself unique. 
+Two solutions present themselves:
+- make slug fields non-unique, allowing more than one review to exist with an empty slug review
+    - this opens up potential errors with redirection to other-than-intended beer_review_single pages, should two beer reviews have the same slug
+    - the odds of this are low - why would a user submit two reviews of the same beer?
+    - This would also prevent mass-approval of reviews, as these reviews would have the same empty slug field
+- remove the slug field, and load beer_review_single pages by primary key instead
+    - each beer review has a unique primary key
 
 
 # Testing

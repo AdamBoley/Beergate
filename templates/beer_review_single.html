@@ -20,16 +20,16 @@
         </p>
         <div>
             {% if user.is_authenticated %}
-                <form action="{% url 'review_upvote' beer_review.slug %}" method="POST">
+                <form action="{% url 'review_upvote' beer_review.pk %}" method="POST">
 
                     {% csrf_token %}
                     
                     {% if upvoted %}
-                        <button type="submit" name="beer_review_id" value="{{ beer_review.slug }}" class="">
+                        <button type="submit" name="beer_review_id" value="{{ beer_review.pk }}" class="">
                             <i class="fas fa-thumbs-up"></i>
                         </button>
                     {% else %}
-                        <button type="submit" name="beer_review_id" value="{{ beer_review.slug }}" class="">
+                        <button type="submit" name="beer_review_id" value="{{ beer_review.pk }}" class="">
                             <i class="far fa-thumbs-up"></i>
                         </button>    
 
@@ -44,16 +44,16 @@
         </div>
         <div>
             {% if user.is_authenticated %}
-                <form action="{% url 'review_downvote' beer_review.slug %}" method="POST">
+                <form action="{% url 'review_downvote' beer_review.pk %}" method="POST">
 
                     {% csrf_token %}
                     
                     {% if downvoted %}
-                        <button type="submit" name="beer_review_id" value="{{ beer_review.slug }}" class="">
+                        <button type="submit" name="beer_review_id" value="{{ beer_review.pk }}" class="">
                             <i class="fas fa-thumbs-down"></i>
                         </button>
                     {% else %}
-                        <button type="submit" name="beer_review_id" value="{{ beer_review.slug }}" class="">
+                        <button type="submit" name="beer_review_id" value="{{ beer_review.pk }}" class="">
                             <i class="far fa-thumbs-down"></i>
                         </button>    
 

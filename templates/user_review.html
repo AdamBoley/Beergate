@@ -12,6 +12,7 @@
                     {% if reviewed %}
                         <div class="alert alert-success" role="alert">
                             Your review has been submitted and is awaiting approval
+                            <a href="{% url 'home' %}">Go back to the home page</a>
                         </div>
                     {% else %}
                         {% if user.is_authenticated %}
